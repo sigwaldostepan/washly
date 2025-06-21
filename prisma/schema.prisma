@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  role Role
+
+  customer Customer?
+
+  @@index(fields: [email])
+  @@map("users")
+}
+
+model Customer {
+  id        Int      @id @default(autoincrement())
+  name      String
+  phone     String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@index(fields: [userId])
+  @@index(fields: [createdAt])
+  @@map("customers")
+}
+
+model Booking {
+  id        Int           @id @default(autoincrement())
+  time      DateTime
+  vehicle   String
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt()
+  status    BookingStatus
+  totalPay  Decimal
+
+  serviceId Int?
+  service   Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+
+  payment Payment?
+
+  @@index(fields: [time])
+  @@map("bookings")
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  name        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt()
+  price       Decimal
+  description String
+  icon        String
+
+  bookings Booking[]
+
+  @@map("service")
+}
+
+model Payment {
+  id            Int           @id @default(autoincrement())
+  proofImage    String?
+  paymentMethod PaymentMethod
+  amount        Decimal
+  paidAt        DateTime      @default(now())
+
+  bookingId Int     @unique
+  booking   Booking @relation(fields: [bookingId], references: [id])
+
+  @@map("payment")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum BookingStatus {
+  BOOKED
+  COMPLETED
+}
+
+enum PaymentMethod {
+  CASH
+  QRIS
+  BANK
+}
