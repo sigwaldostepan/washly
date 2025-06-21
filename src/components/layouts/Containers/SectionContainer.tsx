@@ -35,3 +35,5 @@ export const SectionContainer = React.forwardRef<
     </section>
   );
 });
+
+SectionContainer.displayName = 'SectionContainer';

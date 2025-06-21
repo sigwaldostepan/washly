@@ -1,14 +1,14 @@
 import { queryOptions, useQuery } from '@tanstack/react-query';
 import { getServices } from '../services';
 
-export const useGetServiceOptions = (search?: string) =>
+export const getServiceQueryOptions = (search?: string) =>
   queryOptions({
     queryKey: ['services', search],
     queryFn: () => getServices(search),
   });
 
-type UseGetServiceOptions = Omit<ReturnType<typeof useGetServiceOptions>, 'queryFn'>;
+type UseGetServiceOptions = Omit<ReturnType<typeof getServiceQueryOptions>, 'queryFn'>;
 
 export const useGetServices = (search?: string, options?: UseGetServiceOptions) => {
-  return useQuery({ ...useGetServiceOptions(search), ...options });
+  return useQuery({ ...getServiceQueryOptions(search), ...options });
 };

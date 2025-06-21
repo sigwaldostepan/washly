@@ -1,14 +1,9 @@
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { JWTPayload } from '@/lib/jwt';
 import Link from 'next/link';
 import React from 'react';
 
-interface AdminLayoutNavbarProps {
-  admin?: JWTPayload;
-}
-
-export const AdminLayoutNavbar: React.FC<AdminLayoutNavbarProps> = ({ admin }) => {
+export const AdminLayoutNavbar: React.FC = () => {
   return (
     <div className='border-border bg-primary-foreground/30 padded sticky top-0 z-50 h-fit w-full border-b shadow backdrop-blur'>
       <span className='flex h-8 items-center justify-start gap-2'>

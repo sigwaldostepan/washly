@@ -1,8 +1,4 @@
-import { getSession } from '@/lib/auth';
-
 export default async function Home() {
-  const user = await getSession();
-
   return (
     <>
       <div className='min-h-screen'>

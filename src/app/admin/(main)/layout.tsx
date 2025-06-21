@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import React from 'react';
 
-const metadata: Metadata = {
+export const metadata: Metadata = {
   title: {
     default: 'Manage Washly',
     template: '%s - Washly Admin',

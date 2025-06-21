@@ -11,12 +11,25 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.config({
-    extends: [
-      'next/core-web-vitals',
-      'next/typescript',
-      'plugin:@next/next/recommended',
-    ],
+    extends: ['next/core-web-vitals', 'next/typescript', 'plugin:@next/next/recommended'],
     ignorePatterns: ['src/generated/**'],
+    rules: {
+      '@typescript-eslint/no-unused-expression': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
+      '@typescript-eslint/no-unused-expressions': [
+        'error',
+        {
+          allowShortCircuit: true,
+          allowTernary: true,
+        },
+      ],
+    },
   }),
 ];
 

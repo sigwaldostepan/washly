@@ -1,7 +1,7 @@
 import { refreshSession } from './lib/auth';
 import { NextResponse } from 'next/server';
 
-export default async function authMiddleware(req: Request) {
+export default async function authMiddleware(_req: Request) {
   await refreshSession();
 
   return NextResponse.next();

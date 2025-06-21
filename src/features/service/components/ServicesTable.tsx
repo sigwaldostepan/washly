@@ -12,7 +12,7 @@ import { useGetServices } from '@/features/service/hooks';
 import { Button } from '@/components/ui/button';
 import { Service } from '@/generated/prisma';
 import { toRupiah } from '@/utils/to-rupiah';
-import { Edit, LucideIcon, MoreHorizontal, Trash } from 'lucide-react';
+import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useDeviceScreen } from '@/hooks';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
