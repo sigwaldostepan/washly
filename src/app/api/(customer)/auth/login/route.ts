@@ -29,7 +29,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: 'Email atau password salah' }, { status: 400 });
     }
 
-    const token = await setAuthCookie({ id: user.id, email: user.email, role: user.role });
+    const token = await setAuthCookie({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      name: user.name,
+    });
     return NextResponse.json({
       data: {
         access_token: token,

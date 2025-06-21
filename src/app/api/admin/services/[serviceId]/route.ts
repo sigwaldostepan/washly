@@ -2,7 +2,7 @@ import { editServiceSchema } from '@/features/service/forms';
 import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 
-export async function PATCH(req: Request, { params }: { params: { serviceId: number } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ serviceId: number }> }) {
   try {
     const body = await req.json();
 
@@ -37,7 +37,7 @@ export async function PATCH(req: Request, { params }: { params: { serviceId: num
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { serviceId: number } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ serviceId: number }> }) {
   try {
     const { serviceId } = await params;
 
