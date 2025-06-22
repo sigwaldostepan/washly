@@ -40,4 +40,6 @@ export const refreshSession = async () => {
   const newToken = await signJWT(payload);
 
   cookie.set(serverEnv.JWT_COOKIE_NAME, newToken, { ...defaultCookieOptions });
+
+  return { user: payload };
 };

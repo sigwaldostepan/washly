@@ -8,5 +8,5 @@ export default async function authMiddleware(_req: Request) {
 }
 
 export const config = {
-  matcher: ['/((?!api/auth|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!api/auth|api/admin/auth|_next/static|_next/image|favicon.ico).*)'],
 };
