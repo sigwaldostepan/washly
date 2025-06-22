@@ -35,6 +35,8 @@ model Customer {
   userId String @unique
   user   User   @relation(fields: [userId], references: [id])
 
+  bookings Booking[]
+
   @@index(fields: [userId])
   @@index(fields: [createdAt])
   @@map("customers")
@@ -47,10 +49,13 @@ model Booking {
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt()
   status    BookingStatus
-  totalPay  Decimal
+  totalPay  Decimal       @db.Decimal(10, 2)
 
   serviceId Int?
   service   Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
+
+  customerId Int
+  customer   Customer @relation(fields: [customerId], references: [id])
 
   payment Payment?
 
@@ -63,7 +68,7 @@ model Service {
   name        String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt()
-  price       Decimal
+  price       Decimal  @db.Decimal(10, 2)
   description String
   icon        String
 
@@ -76,7 +81,7 @@ model Payment {
   id            Int           @id @default(autoincrement())
   proofImage    String?
   paymentMethod PaymentMethod
-  amount        Decimal
+  amount        Decimal       @db.Decimal(10, 2)
   paidAt        DateTime      @default(now())
 
   bookingId Int     @unique
