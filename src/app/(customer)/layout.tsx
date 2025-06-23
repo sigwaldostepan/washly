@@ -2,6 +2,7 @@ import * as React from 'react';
 import { CustomerLayoutNavbar } from '@/components/layouts/Navbar';
 import { getSession } from '@/lib/auth';
 import { Metadata } from 'next';
+import { CustomerLayoutFooter } from '@/components/layouts';
 
 export const metadata: Metadata = {
   title: {
@@ -17,6 +18,7 @@ const CustomerLayout: React.FC<{ children: React.ReactNode }> = async ({ childre
     <>
       <CustomerLayoutNavbar customer={session?.user} />
       <main className='relative z-0'>{children}</main>
+      <CustomerLayoutFooter />
     </>
   );
 };
