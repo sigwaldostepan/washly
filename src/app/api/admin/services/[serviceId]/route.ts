@@ -2,6 +2,28 @@ import { editServiceSchema } from '@/features/service/forms';
 import { prisma } from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 
+export async function GET(req: Request, { params }: { params: Promise<{ serviceId: number }> }) {
+  try {
+    const { serviceId } = await params;
+
+    const service = await prisma.service.findUnique({
+      where: { id: +serviceId },
+    });
+
+    if (!service) {
+      return NextResponse.json({ message: 'Layanan tidak ditemukan' }, { status: 404 });
+    }
+
+    return NextResponse.json({ data: service });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { message: 'Terjadi kesalahan saat mengambil data layanan' },
+      { status: 500 },
+    );
+  }
+}
+
 export async function PATCH(req: Request, { params }: { params: Promise<{ serviceId: number }> }) {
   try {
     const body = await req.json();
