@@ -46,7 +46,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Service } from '@/generated/prisma';
 import { z } from 'zod';
 
-export const AdminServiceManagementPage: React.FC = () => {
+export const AdminServices: React.FC = () => {
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 500);
 
