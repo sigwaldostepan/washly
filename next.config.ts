@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
     JWT_COOKIE_NAME: process.env.JWT_COOKIE_NAME,
     NEXT_PUBLIC_DOMAIN_URL: process.env.NEXT_PUBLIC_DOMAIN_URL,
   },
+  images: {
+    remotePatterns: [{ protocol: 'https', hostname: 'res.cloudinary.com' }],
+  },
 };
 
 export default nextConfig;

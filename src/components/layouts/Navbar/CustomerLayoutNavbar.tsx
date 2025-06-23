@@ -17,7 +17,7 @@ export const CustomerLayoutNavbar: React.FC<CustomerLayoutNavbarProps> = ({ cust
   const { isMobile } = useDeviceScreen();
 
   return (
-    <div className='border-border bg-primary-foreground/30 fixed top-0 left-0 z-50 w-full border-b px-4 py-4 shadow backdrop-blur md:px-12'>
+    <div className='border-border bg-primary-foreground fixed top-0 left-0 z-50 w-full border-b px-4 py-4 shadow md:px-12'>
       <div className='flex w-full items-center justify-between'>
         <Link href='/' className='group'>
           <span className='group-hover:stroke-primary group-hover:text-primary flex items-center text-xl font-semibold transition-all duration-500 md:text-3xl'>

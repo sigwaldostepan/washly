@@ -7,7 +7,8 @@ interface Navigation {
 
 export const NAVIGATIONS = [
   { href: '/', label: 'home' },
-  { href: '/services', label: 'service' },
+  { href: '/services', label: 'layanan kami' },
+  { href: '/bookings/new', label: 'booking' },
 ] satisfies Navigation[];
 
 interface AdminNavigation extends Navigation {

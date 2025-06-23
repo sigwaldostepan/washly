@@ -85,7 +85,7 @@ model Payment {
   paidAt        DateTime      @default(now())
 
   bookingId Int     @unique
-  booking   Booking @relation(fields: [bookingId], references: [id])
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 
   @@map("payment")
 }
@@ -96,8 +96,10 @@ enum Role {
 }
 
 enum BookingStatus {
+  PENDING
   BOOKED
   COMPLETED
+  CANCELED
 }
 
 enum PaymentMethod {

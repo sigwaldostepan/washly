@@ -1,3 +1,5 @@
+'use client';
+
 import { forwardRef } from 'react';
 import { CurrencyInput as CurrencyInputComponent } from 'input-currency-react';
 import { cn } from '@/lib/utils';
