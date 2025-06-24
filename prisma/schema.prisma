@@ -9,70 +9,64 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
+  id        String    @id @default(cuid())
+  email     String    @unique
   name      String
   password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  role      Role
+  customer  Customer?
 
-  role Role
-
-  customer Customer?
-
-  @@index(fields: [email])
+  @@index([email])
   @@map("users")
 }
 
 model Customer {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
   phone     String?
   address   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  userId    String    @unique
+  bookings  Booking[]
+  user      User      @relation(fields: [userId], references: [id])
 
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id])
-
-  bookings Booking[]
-
-  @@index(fields: [userId])
-  @@index(fields: [createdAt])
+  @@index([userId])
+  @@index([createdAt])
   @@map("customers")
 }
 
 model Booking {
-  id        Int           @id @default(autoincrement())
-  time      DateTime
-  vehicle   String
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt()
-  status    BookingStatus
-  totalPay  Decimal       @db.Decimal(10, 2)
-
-  serviceId Int?
-  service   Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
-
+  id         Int           @id @default(autoincrement())
+  time       DateTime
+  vehicle    String
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  status     BookingStatus
+  totalPay   Decimal       @db.Decimal(10, 2)
+  serviceId  Int?
   customerId Int
-  customer   Customer @relation(fields: [customerId], references: [id])
+  customer   Customer      @relation(fields: [customerId], references: [id])
+  service    Service?      @relation(fields: [serviceId], references: [id])
+  payment    Payment?
 
-  payment Payment?
-
-  @@index(fields: [time])
+  @@index([time])
+  @@index([customerId], map: "bookings_customerId_fkey")
+  @@index([serviceId], map: "bookings_serviceId_fkey")
   @@map("bookings")
 }
 
 model Service {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   name        String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt()
-  price       Decimal  @db.Decimal(10, 2)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  price       Decimal   @db.Decimal(10, 2)
   description String
   icon        String
-
-  bookings Booking[]
+  bookings    Booking[]
 
   @@map("service")
 }
@@ -83,9 +77,8 @@ model Payment {
   paymentMethod PaymentMethod
   amount        Decimal       @db.Decimal(10, 2)
   paidAt        DateTime      @default(now())
-
-  bookingId Int     @unique
-  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  bookingId     Int           @unique
+  booking       Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 
   @@map("payment")
 }
