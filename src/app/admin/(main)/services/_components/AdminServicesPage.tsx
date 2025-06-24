@@ -154,7 +154,7 @@ export const AdminServices: React.FC = () => {
         </div>
 
         <ServicesTable
-          search={search}
+          search={debouncedSearch}
           initialState={services}
           onEdit={onEdit}
           onDelete={onDelete}
