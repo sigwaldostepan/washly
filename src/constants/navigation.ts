@@ -1,4 +1,4 @@
-import { Calendar, ClipboardList, Home, LucideIcon } from 'lucide-react';
+import { Calendar, ClipboardList, Home, LucideIcon, Users } from 'lucide-react';
 
 interface Navigation {
   href: string;
@@ -19,4 +19,5 @@ export const ADMIN_NAVIGATIONS = [
   { href: '/admin', label: 'dashboard', icon: Home },
   { href: '/admin/bookings', label: 'booking', icon: Calendar },
   { href: '/admin/services', label: 'layanan', icon: ClipboardList },
+  { href: '/admin/customers', label: 'customer', icon: Users },
 ] satisfies AdminNavigation[];

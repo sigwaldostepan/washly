@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "migrate:dev": "dotenv -e .env.development -- prisma migrate dev --schema ./prisma/schema.prisma",
-    "migrate:prod": "dotenv -e .env -- prisma migrate dev --schema ./prisma/schema.prisma",
+    "migrate:prod": "dotenv -e .env -- prisma migrate deploy --schema ./prisma/schema.prisma",
     "db:push": "dotenv -e .env.development -- prisma db push --schema ./prisma/schema.prisma",
     "db:reset-dev": "dotenv -e .env.development -- prisma migrate reset --schema ./prisma/schema.prisma",
     "db:reset-prod": "dotenv -e .env -- prisma migrate reset --schema ./prisma/schema.prisma"
