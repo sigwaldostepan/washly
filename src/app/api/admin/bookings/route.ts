@@ -7,7 +7,6 @@ export async function GET(req: NextRequest) {
     const pageParams = req.nextUrl.searchParams.get('page') ?? '1';
 
     const page = Math.max(+pageParams, 1);
-    console.log({ page });
 
     const [bookings, total] = await prisma.$transaction([
       prisma.booking.findMany({
@@ -39,6 +38,9 @@ export async function GET(req: NextRequest) {
         },
         take: 10,
         skip: (+page - 1) * 10,
+        orderBy: {
+          time: 'desc',
+        },
       }),
       prisma.booking.count(),
     ]);
