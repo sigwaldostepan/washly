@@ -1,4 +1,3 @@
-import { SectionContainer } from '@/components/layouts';
 import { getSession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { BookingHistory } from './_components';

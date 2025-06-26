@@ -1,7 +1,7 @@
 import { queryOptions, useQuery } from '@tanstack/react-query';
 import { getStatsSummary } from '../services';
 
-const getStatsSummaryOptions = () => {
+export const getStatsSummaryOptions = () => {
   return queryOptions({
     queryKey: ['stats-summary'],
     queryFn: () => getStatsSummary(),

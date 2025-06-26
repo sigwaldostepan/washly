@@ -1,13 +1,9 @@
 'use client';
 
-import { AdminPageContainer, SectionContainer } from '@/components/layouts';
-import {
-  getBookingsQueryOptions,
-  useGetBookings,
-  useUpdateBookingStatus,
-} from '@/features/booking/hooks';
-import { useState } from 'react';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { AdminPageContainer, SectionContainer } from '@/components/layouts/Containers';
+import { useGetStatsSummary } from '@/features/stats/hooks';
+import { SummaryCard } from '@/features/stats/components';
+import { BookingsTable } from '@/features/booking/components';
 import {
   Dialog,
   DialogClose,
@@ -16,40 +12,38 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useDisclosure } from '@/hooks';
+import { ImageWithLoader } from '@/components/shared';
 import { Button } from '@/components/ui/button';
+import { useDisclosure } from '@/hooks';
+import { useState } from 'react';
+import {
+  getBookingsQueryOptions,
+  useGetBookings,
+  useUpdateBookingStatus,
+} from '@/features/booking/hooks';
 import { toast } from 'sonner';
 import { keepPreviousData, useQueryClient } from '@tanstack/react-query';
 import { PaginatedResponse } from '@/interfaces';
 import { AdminBookingResponse } from '@/features/booking/interfaces';
-import { BookingsTable } from '@/features/booking/components';
 import { BookingStatus } from '@/generated/prisma';
-import { ImageWithLoader, Pagination } from '@/components/shared';
 
-export const AdminBookings = () => {
-  const [page, setPage] = useState<number>(1);
+export const Dashboard = () => {
   const [selectedProof, setSelectedProof] = useState<string>();
 
   const queryClient = useQueryClient();
+  const { data: summary } = useGetStatsSummary();
   const { data: bookings, isPending: isFetchingBookings } = useGetBookings({
-    page,
+    page: 1,
     placeholderData: keepPreviousData,
   });
   const { mutateAsync: updateBookingStatus } = useUpdateBookingStatus({
-    onSuccess: () => {
-      toast.success('Booking status updated');
-
-      queryClient.invalidateQueries({
-        queryKey: [...getBookingsQueryOptions(page).queryKey],
-      });
-    },
     onMutate: async (data) => {
       await queryClient.cancelQueries({
-        queryKey: [...getBookingsQueryOptions(page).queryKey],
+        queryKey: [...getBookingsQueryOptions(1).queryKey],
       });
 
       queryClient.setQueryData(
-        [...getBookingsQueryOptions(page).queryKey],
+        [...getBookingsQueryOptions(1).queryKey],
         (prev: PaginatedResponse<AdminBookingResponse>) => {
           const updatedData = prev.data.map((booking) => {
             if (booking.id === data.id) {
@@ -58,6 +52,7 @@ export const AdminBookings = () => {
                 status: data.status,
               };
             }
+
             return booking;
           });
 
@@ -67,6 +62,9 @@ export const AdminBookings = () => {
           };
         },
       );
+    },
+    onSuccess: () => {
+      toast.success('Booking status updated');
     },
   });
 
@@ -82,18 +80,39 @@ export const AdminBookings = () => {
   };
 
   return (
-    <AdminPageContainer title='Booking' description='Lihat dan manage booking'>
-      <SectionContainer padded className='relative w-full overflow-hidden'>
-        <ScrollArea className='w-full whitespace-nowrap'>
-          <BookingsTable
-            bookings={bookings?.data ?? []}
-            isPending={isFetchingBookings}
-            onPreviewImage={onPreviewImage}
-            onUpdateBookingStatus={onUpdateBookingStatus}
+    <AdminPageContainer title='Dashboard'>
+      <SectionContainer padded>
+        <div className='w-full'>
+          <div className='flex items-center gap-4'>
+            <SummaryCard
+              title='Pendapatan hari ini'
+              amount={summary?.dailySummary.dailyRevenue ?? 0}
+              difference={Number(summary?.dailySummary.dailyDifference ?? 0)}
+              format='currency'
+            />
+            <SummaryCard
+              title='Pendapatan bulan ini'
+              amount={summary?.monthlySummary.monthlyRevenue ?? 0}
+              difference={Number(summary?.monthlySummary.monthlyDifference ?? 0)}
+              format='currency'
+            />
+          </div>
+          <SummaryCard
+            className='mt-4'
+            title='Jumlah kendaraan yg sudah dicuci'
+            amount={summary?.totalVehicleWashed ?? 0}
+            format='number'
           />
-          <ScrollBar orientation='horizontal' />
-        </ScrollArea>
-        <Pagination page={page} totalPages={bookings?.meta.totalPage ?? 1} onPageChange={setPage} />
+        </div>
+      </SectionContainer>
+      <SectionContainer padded>
+        <h1 className='my-3 text-xl font-semibold'>Booking Terbaru</h1>
+        <BookingsTable
+          bookings={bookings?.data ?? []}
+          isPending={isFetchingBookings}
+          onPreviewImage={onPreviewImage}
+          onUpdateBookingStatus={onUpdateBookingStatus}
+        />
       </SectionContainer>
 
       {/* Dialogs */}

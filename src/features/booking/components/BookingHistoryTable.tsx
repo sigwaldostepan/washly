@@ -7,7 +7,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
-import { JWTPayload } from '@/lib/jwt';
 import { getBookingStatusColor } from '@/features/booking/utils';
 import { format } from 'date-fns';
 import { toRupiah } from '@/utils/to-rupiah';

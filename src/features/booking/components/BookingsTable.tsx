@@ -13,26 +13,26 @@ import { cn } from '@/lib/utils';
 import { Eye } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useGetBookings } from '@/features/booking/hooks';
 import { Button } from '@/components/ui/button';
 import { canUpdateBookingStatus, getBookingStatusColor } from '../utils';
 import { badgeVariants } from '@/components/ui/badge';
 import { BookingStatus } from '@/generated/prisma';
 import { toRupiah } from '@/utils/to-rupiah';
+import { AdminBookingResponse } from '../interfaces';
 
 interface BookingsTableProps {
-  page?: number;
+  bookings: AdminBookingResponse[];
+  isPending?: boolean;
   onPreviewImage: (image: string) => void;
   onUpdateBookingStatus: (status: BookingStatus, id: number) => void;
 }
 
 export const BookingsTable: React.FC<BookingsTableProps> = ({
-  page,
+  bookings,
+  isPending,
   onPreviewImage,
   onUpdateBookingStatus,
 }) => {
-  const { data: bookings, isPending } = useGetBookings({ page });
-
   return (
     <Table>
       <TableHeader>
@@ -75,14 +75,14 @@ export const BookingsTable: React.FC<BookingsTableProps> = ({
               </TableRow>
             ))}
           </>
-        ) : bookings?.data.length === 0 ? (
+        ) : bookings?.length === 0 ? (
           <TableRow>
             <TableCell colSpan={7} className='h-24 text-center'>
               Belom ada booking
             </TableCell>
           </TableRow>
         ) : (
-          bookings?.data.map((booking) => (
+          bookings?.map((booking) => (
             <TableRow key={booking.id}>
               <TableCell>{format(booking.time, 'dd-MM-yyyy, HH:mm')}</TableCell>
               <TableCell>{booking.customer.name}</TableCell>

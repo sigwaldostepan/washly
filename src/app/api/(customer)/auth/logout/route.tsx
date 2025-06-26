@@ -8,7 +8,8 @@ export const POST = async () => {
     cookie.delete(serverEnv.JWT_COOKIE_NAME);
 
     return NextResponse.json({ success: true, message: 'Logout berhasil' });
-  } catch (error) {
+  } catch (err) {
+    console.log(err);
     return NextResponse.json({ success: false, message: 'Logout gagal' }, { status: 500 });
   }
 };
