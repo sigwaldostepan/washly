@@ -1,9 +1,66 @@
 import { PaymentMethod } from '@/generated/prisma';
 import { prisma } from '@/lib/prisma';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { uploadImage } from '@/lib/cloudinary';
+import { getPaginationResponse } from '@/utils/pagination';
 
-export async function POST(req: Request) {
+export const GET = async (req: NextRequest) => {
+  try {
+    const userId = req.nextUrl.searchParams.get('userId');
+    const page = req.nextUrl.searchParams.get('page') ?? '1';
+
+    if (!userId) {
+      return NextResponse.json({ message: 'Customer ID tidak ditemukan' }, { status: 400 });
+    }
+
+    const [bookings, total] = await prisma.$transaction([
+      prisma.booking.findMany({
+        select: {
+          id: true,
+          time: true,
+          vehicle: true,
+          status: true,
+          totalPay: true,
+          service: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          payment: {
+            select: {
+              paymentMethod: true,
+            },
+          },
+        },
+        where: {
+          customer: {
+            userId,
+          },
+        },
+        take: 10,
+        skip: (+page - 1) * 10,
+        orderBy: {
+          time: 'desc',
+        },
+      }),
+      prisma.booking.count({
+        where: {
+          customer: {
+            userId,
+          },
+        },
+      }),
+    ]);
+
+    return NextResponse.json(getPaginationResponse(bookings, total, +page));
+  } catch (err) {
+    console.log(err);
+    return NextResponse.json({ message: 'Terjadi kesalahan saat mengambil data' }, { status: 500 });
+  }
+};
+
+export const POST = async (req: NextRequest) => {
   try {
     const formData = await req.formData();
 
@@ -78,4 +135,4 @@ export async function POST(req: Request) {
       { status: 500 },
     );
   }
-}
+};

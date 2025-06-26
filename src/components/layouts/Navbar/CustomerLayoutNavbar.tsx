@@ -7,6 +7,7 @@ import { NAVIGATIONS } from '@/constants';
 import { useLogout } from '@/features/auth/hooks';
 import { useDeviceScreen } from '@/hooks';
 import { JWTPayload } from '@/lib/jwt';
+import { cn } from '@/lib/utils';
 import { History, LogOut, Menu, User, WashingMachine } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -92,7 +93,7 @@ export const CustomerLayoutNavbar: React.FC<CustomerLayoutNavbarProps> = ({ cust
                     <span className='block h-0.5 w-full scale-0 bg-black transition-all duration-300 group-hover:scale-100'></span>
                   </Link>
                 ))}
-                {!customer ? (
+                {!customer && (
                   <span className='flex items-center gap-2'>
                     <Link href='/login' className={buttonVariants()}>
                       Login
@@ -101,10 +102,6 @@ export const CustomerLayoutNavbar: React.FC<CustomerLayoutNavbarProps> = ({ cust
                       Register
                     </Link>
                   </span>
-                ) : (
-                  <Button size='icon' variant='outline' className='rounded-full'>
-                    <User />
-                  </Button>
                 )}
               </>
             )}
@@ -115,15 +112,22 @@ export const CustomerLayoutNavbar: React.FC<CustomerLayoutNavbarProps> = ({ cust
                     <User />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className='w-full pr-12'>
-                  <div className='flex flex-col items-start gap-4'>
-                    <Link href='/history' className='flex items-center gap-2 font-semibold'>
+                <PopoverContent className='w-full p-1'>
+                  <div className='flex flex-col items-start text-start'>
+                    <Link
+                      href='/bookings'
+                      className={cn(
+                        buttonVariants({ variant: 'ghost' }),
+                        'flex w-full items-center justify-start gap-2 font-semibold',
+                      )}
+                    >
                       <History className='!size-4' />
                       History Booking
                     </Link>
                     <Button
                       onClick={() => logout(undefined)}
-                      className='text-destructive flex items-center gap-2 font-semibold'
+                      className='text-destructive flex w-full items-center justify-start gap-2 font-semibold'
+                      variant='ghost'
                     >
                       <LogOut className='!size-4' />
                       Logout

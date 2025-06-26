@@ -15,3 +15,13 @@ export interface AdminBookingResponse {
     name: string;
   };
 }
+
+export interface BookingHistoryResponse {
+  id: number;
+  time: string;
+  vehicle: string;
+  status: string;
+  totalPay: number;
+  service: Pick<Service, 'id' | 'name'>;
+  payment: Pick<BookingPayment, 'paymentMethod'>;
+}
